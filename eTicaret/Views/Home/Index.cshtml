@@ -1,0 +1,462 @@
+﻿@using eTicaret.Models
+@model List<Urun>
+@{
+    ViewData["Title"] = "Ana Sayfa";
+}
+
+<style>
+    .hero-section {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border-radius: 20px;
+        padding: 4rem 2rem;
+        color: white;
+        margin-bottom: 3rem;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+    }
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: pulse 15s ease-in-out infinite;
+        }
+
+    @@keyframes pulse {
+        0%, 100% {
+            transform: scale(1);
+        }
+
+        50% {
+            transform: scale(1.1);
+        }
+    }
+
+    .hero-content {
+        position: relative;
+        z-index: 1;
+    }
+
+    .hero-title {
+        font-size: 3rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+    }
+
+    .hero-subtitle {
+        font-size: 1.2rem;
+        opacity: 0.9;
+        margin-bottom: 2rem;
+    }
+
+    .section-title {
+        font-size: 2rem;
+        font-weight: 700;
+        margin-bottom: 2rem;
+        position: relative;
+        display: inline-block;
+    }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 60px;
+            height: 4px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 2px;
+        }
+
+    .product-card {
+        border: none;
+        border-radius: 20px;
+        overflow: hidden;
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        height: 100%;
+        background: white;
+        position: relative;
+    }
+
+        .product-card:hover {
+            transform: translateY(-15px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(102, 126, 234, 0.3);
+        }
+
+    .product-image-wrapper {
+        position: relative;
+        overflow: hidden;
+        height: 250px;
+        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    }
+
+    .product-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.6s ease;
+    }
+
+    .product-card:hover .product-image {
+        transform: scale(1.15) rotate(2deg);
+    }
+
+    .product-badge {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        color: white;
+        padding: 0.4rem 0.8rem;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        z-index: 2;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }
+
+    .product-body {
+        padding: 1.5rem;
+    }
+
+    .product-category {
+        color: #667eea;
+        font-size: 0.85rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 0.5rem;
+    }
+
+    .product-title {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #1f2937;
+        margin-bottom: 0.5rem;
+        min-height: 2.5rem;
+    }
+
+    .product-description {
+        color: #6b7280;
+        font-size: 0.9rem;
+        margin-bottom: 1rem;
+        min-height: 3rem;
+    }
+
+    .variant-badges {
+        display: flex;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+        margin-bottom: 1rem;
+    }
+
+    .variant-badge {
+        background: linear-gradient(135deg, #f3f4f6, #e5e7eb);
+        padding: 0.3rem 0.8rem;
+        border-radius: 15px;
+        font-size: 0.75rem;
+        font-weight: 500;
+        color: #374151;
+        border: 1px solid #d1d5db;
+    }
+
+    .product-price {
+        font-size: 1.8rem;
+        font-weight: 700;
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        margin-bottom: 0.5rem;
+    }
+
+    .stock-info {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.85rem;
+        color: #6b7280;
+        margin-bottom: 1rem;
+    }
+
+    .stock-badge {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: #10b981;
+        animation: blink 2s infinite;
+    }
+
+    @@keyframes blink {
+        0%, 100% {
+            opacity: 1;
+        }
+
+        50% {
+            opacity: 0.3;
+        }
+    }
+
+    .btn-add-cart {
+        width: 100%;
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        border: none;
+        color: white;
+        padding: 0.8rem;
+        border-radius: 12px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        position: relative;
+        overflow: hidden;
+    }
+
+        .btn-add-cart::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .btn-add-cart:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .btn-add-cart:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.5);
+            color: white;
+        }
+
+    .btn-out-stock {
+        background: linear-gradient(135deg, #d1d5db, #9ca3af);
+        cursor: not-allowed;
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 4rem 2rem;
+    }
+
+    .empty-icon {
+        font-size: 5rem;
+        color: #d1d5db;
+        margin-bottom: 1rem;
+    }
+
+    .stats-row {
+        display: flex;
+        gap: 1rem;
+        margin-bottom: 3rem;
+    }
+
+    .stat-card {
+        flex: 1;
+        background: white;
+        padding: 1.5rem;
+        border-radius: 15px;
+        text-align: center;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        transition: all 0.3s ease;
+    }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.2);
+        }
+
+    .stat-icon {
+        font-size: 2.5rem;
+        margin-bottom: 0.5rem;
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .stat-number {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #1f2937;
+    }
+
+    .stat-label {
+        color: #6b7280;
+        font-size: 0.9rem;
+    }
+</style>
+
+<!-- HERO SECTION -->
+<div class="hero-section">
+    <div class="hero-content">
+        <h1 class="hero-title">🛍️ E-Ticaret Mağazamıza Hoş Geldiniz!</h1>
+        <p class="hero-subtitle">En kaliteli ürünleri en uygun fiyatlarla keşfedin</p>
+        <div class="d-flex gap-3 justify-content-center">
+            <a href="#products" class="btn btn-light btn-lg rounded-pill px-4">
+                <i class="fas fa-arrow-down"></i> Ürünleri İncele
+            </a>
+            @if (Context.Session.GetString("KullaniciRol") == "Admin")
+            {
+                <a href="/Admin/Index" class="btn btn-outline-light btn-lg rounded-pill px-4">
+                    <i class="fas fa-cog"></i> Admin Panel
+                </a>
+            }
+        </div>
+    </div>
+</div>
+
+<!-- STATS -->
+<div class="stats-row">
+    <div class="stat-card">
+        <div class="stat-icon">
+            <i class="fas fa-box-open"></i>
+        </div>
+        <div class="stat-number">@(Model?.Count ?? 0)</div>
+        <div class="stat-label">Aktif Ürün</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon">
+            <i class="fas fa-tags"></i>
+        </div>
+        <div class="stat-number">4</div>
+        <div class="stat-label">Kategori</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon">
+            <i class="fas fa-shipping-fast"></i>
+        </div>
+        <div class="stat-number">24/7</div>
+        <div class="stat-label">Hızlı Kargo</div>
+    </div>
+</div>
+
+<!-- PRODUCTS SECTION -->
+<div id="products">
+    <h2 class="section-title">✨ Öne Çıkan Ürünler</h2>
+
+    @if (Model != null && Model.Count > 0)
+    {
+        <div class="row g-4">
+            @foreach (var urun in Model)
+            {
+                <div class="col-lg-3 col-md-4 col-sm-6">
+                    <div class="product-card">
+                        @if (urun.StokMiktari < 10 && urun.StokMiktari > 0)
+                        {
+                            <div class="product-badge">
+                                <i class="fas fa-fire"></i> Son @urun.StokMiktari Adet
+                            </div>
+                        }
+
+                        <div class="product-image-wrapper">
+                            @if (!string.IsNullOrEmpty(urun.ResimYolu))
+                            {
+                                <img src="@urun.ResimYolu" class="product-image" alt="@urun.UrunAdi" loading="lazy">
+                            }
+                            else
+                            {
+                                <div class="product-image d-flex align-items-center justify-content-center">
+                                    <i class="fas fa-image fa-4x text-muted"></i>
+                                </div>
+                            }
+                        </div>
+
+                        <div class="product-body">
+                            <div class="product-category">
+                                <i class="fas fa-tag"></i> @(urun.Kategori?.KategoriAdi ?? "Kategori Yok")
+                            </div>
+
+                            <h5 class="product-title">@urun.UrunAdi</h5>
+
+                            @if (!string.IsNullOrEmpty(urun.Aciklama))
+                            {
+                                <p class="product-description">
+                                    @(urun.Aciklama.Length > 60 ? urun.Aciklama.Substring(0, 60) + "..." : urun.Aciklama)
+                                </p>
+                            }
+
+                            @if (urun.Varyantlar != null && urun.Varyantlar.Count > 0)
+                            {
+                                <div class="variant-badges">
+                                    @{
+                                        var renkler = urun.Varyantlar.Select(v => v.Renk).Distinct().Where(r => !string.IsNullOrEmpty(r));
+                                        var bedenler = urun.Varyantlar.Select(v => v.Beden).Distinct().Where(b => !string.IsNullOrEmpty(b));
+                                    }
+
+                                    @foreach (var renk in renkler)
+                                    {
+                                        <span class="variant-badge">
+                                            <i class="fas fa-circle"></i> @renk
+                                        </span>
+                                    }
+                                    @foreach (var beden in bedenler)
+                                    {
+                                        <span class="variant-badge">
+                                            <i class="fas fa-ruler"></i> @beden
+                                        </span>
+                                    }
+                                </div>
+                            }
+
+                            <div class="product-price">@urun.Fiyat.ToString("C2")</div>
+
+                            <div class="stock-info">
+                                @if (urun.StokMiktari > 0)
+                                {
+                                    <span class="stock-badge"></span>
+                                    <span><strong>Stokta:</strong> @urun.StokMiktari adet</span>
+                                }
+                                else
+                                {
+                                    <i class="fas fa-exclamation-circle text-danger"></i>
+                                    <span class="text-danger">Stokta Yok</span>
+                                }
+                            </div>
+
+                            @if (urun.StokMiktari > 0)
+                            {
+                                <a href="/Sepet/Ekle?id=@urun.UrunID" class="btn btn-add-cart">
+                                    <i class="fas fa-shopping-cart"></i> Sepete Ekle
+                                </a>
+                            }
+                            else
+                            {
+                                <button class="btn btn-add-cart btn-out-stock" disabled>
+                                    <i class="fas fa-times"></i> Stokta Yok
+                                </button>
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="empty-state">
+            <div class="empty-icon">
+                <i class="fas fa-box-open"></i>
+            </div>
+            <h3>Henüz Ürün Eklenmemiş</h3>
+            <p class="text-muted">Admin panelinden ürün ekleyebilirsiniz.</p>
+            @if (Context.Session.GetString("KullaniciRol") == "Admin")
+            {
+                <a href="/Admin/UrunEkle" class="btn btn-gradient mt-3">
+                    <i class="fas fa-plus"></i> İlk Ürünü Ekle
+                </a>
+            }
+        </div>
+    }
+</div>

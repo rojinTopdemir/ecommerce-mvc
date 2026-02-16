@@ -1,0 +1,230 @@
+﻿@{
+    ViewData["Title"] = "Satış Raporları";
+}
+
+<style>
+    .report-header {
+        background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+        color: white;
+        padding: 2rem;
+        border-radius: 15px;
+        margin-bottom: 2rem;
+        text-align: center;
+    }
+
+    .stat-card {
+        background: white;
+        border-radius: 15px;
+        padding: 1.5rem;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        transition: all 0.3s ease;
+        height: 100%;
+    }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        }
+
+    .stat-icon {
+        width: 60px;
+        height: 60px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.8rem;
+        margin-bottom: 1rem;
+        color: white;
+    }
+
+    .stat-number {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #1f2937;
+        margin-bottom: 0.5rem;
+    }
+
+    .stat-label {
+        color: #6b7280;
+        font-size: 0.9rem;
+    }
+
+    .top-products {
+        background: white;
+        border-radius: 15px;
+        padding: 1.5rem;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        margin-top: 2rem;
+    }
+
+    .product-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem;
+        border-bottom: 1px solid #f3f4f6;
+    }
+
+        .product-item:last-child {
+            border-bottom: none;
+        }
+
+    .product-rank {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #6366f1, #8b5cf6);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+    }
+
+    .quick-links {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1rem;
+        margin-top: 2rem;
+    }
+
+    .quick-link {
+        background: white;
+        padding: 1.5rem;
+        border-radius: 15px;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        text-align: center;
+        text-decoration: none;
+        color: #1f2937;
+        transition: all 0.3s ease;
+    }
+
+        .quick-link:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            color: #6366f1;
+        }
+
+        .quick-link i {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+</style>
+
+<div class="report-header">
+    <h2><i class="fas fa-chart-line"></i> Satış Raporları & İstatistikler</h2>
+    <p class="mb-0">İşletme performansınızı detaylı olarak inceleyin</p>
+</div>
+
+<!-- İSTATİSTİKLER -->
+<div class="row g-4">
+    <div class="col-md-3">
+        <div class="stat-card">
+            <div class="stat-icon" style="background: linear-gradient(135deg, #10b981, #059669);">
+                <i class="fas fa-calendar-day"></i>
+            </div>
+            <div class="stat-number">@ViewBag.BugunSatisSayisi</div>
+            <div class="stat-label">Bugünkü Satış</div>
+            <hr>
+            <div class="text-success fw-bold">@ViewBag.BugunCiro.ToString("C2")</div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="stat-card">
+            <div class="stat-icon" style="background: linear-gradient(135deg, #3b82f6, #2563eb);">
+                <i class="fas fa-calendar-week"></i>
+            </div>
+            <div class="stat-number">@ViewBag.AylikSatisSayisi</div>
+            <div class="stat-label">Aylık Satış</div>
+            <hr>
+            <div class="text-primary fw-bold">@ViewBag.AylikCiro.ToString("C2")</div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="stat-card">
+            <div class="stat-icon" style="background: linear-gradient(135deg, #8b5cf6, #7c3aed);">
+                <i class="fas fa-calendar-alt"></i>
+            </div>
+            <div class="stat-number">@ViewBag.YillikSatisSayisi</div>
+            <div class="stat-label">Yıllık Satış</div>
+            <hr>
+            <div class="text-purple fw-bold">@ViewBag.YillikCiro.ToString("C2")</div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="stat-card">
+            <div class="stat-icon" style="background: linear-gradient(135deg, #f59e0b, #d97706);">
+                <i class="fas fa-chart-bar"></i>
+            </div>
+            <div class="stat-number">@ViewBag.ToplamSatisSayisi</div>
+            <div class="stat-label">Toplam Satış</div>
+            <hr>
+            <div class="text-warning fw-bold">@ViewBag.ToplamCiro.ToString("C2")</div>
+        </div>
+    </div>
+</div>
+
+<!-- EN ÇOK SATAN ÜRÜNLER -->
+<div class="top-products">
+    <h4 class="mb-4"><i class="fas fa-trophy text-warning"></i> En Çok Satan Ürünler (Top 5)</h4>
+
+    @if (ViewBag.EnCokSatanlar != null && ViewBag.EnCokSatanlar.Count > 0)
+    {
+        int rank = 1;
+        foreach (var urun in ViewBag.EnCokSatanlar)
+        {
+            <div class="product-item">
+                <div class="d-flex align-items-center gap-3">
+                    <div class="product-rank">@rank</div>
+                    <div>
+                        <strong>@urun.UrunAdi</strong><br>
+                        <small class="text-muted">Satış: @urun.ToplamSatis adet</small>
+                    </div>
+                </div>
+                <div class="text-end">
+                    <div class="fw-bold text-success">@urun.ToplamCiro.ToString("C2")</div>
+                    <small class="text-muted">Ciro</small>
+                </div>
+            </div>
+            rank++;
+        }
+    }
+    else
+    {
+        <p class="text-muted text-center">Henüz satış verisi yok.</p>
+    }
+</div>
+
+<!-- HIZLI ERİŞİM -->
+<div class="quick-links">
+    <a href="/Rapor/SatisRaporu" class="quick-link">
+        <i class="fas fa-file-invoice-dollar"></i>
+        <div class="fw-bold">Satış Raporu</div>
+        <small class="text-muted">Detaylı satış analizi</small>
+    </a>
+
+    <a href="/Rapor/StokRaporu" class="quick-link">
+        <i class="fas fa-boxes"></i>
+        <div class="fw-bold">Stok Raporu</div>
+        <small class="text-muted">Stok durumu analizi</small>
+    </a>
+
+    <a href="/Rapor/KampanyaRaporu" class="quick-link">
+        <i class="fas fa-gift"></i>
+        <div class="fw-bold">Kampanya Raporu</div>
+        <small class="text-muted">Kampanya performansı</small>
+    </a>
+
+    <a href="/Admin/Index" class="quick-link">
+        <i class="fas fa-arrow-left"></i>
+        <div class="fw-bold">Geri Dön</div>
+        <small class="text-muted">Admin paneline dön</small>
+    </a>
+</div>

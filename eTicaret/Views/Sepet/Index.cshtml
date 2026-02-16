@@ -1,0 +1,379 @@
+﻿@using eTicaret.Models
+@model List<SepetItem>
+@{
+    ViewData["Title"] = "Alışveriş Sepetim";
+}
+
+<style>
+    .cart-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 2rem;
+        border-radius: 15px;
+        margin-bottom: 2rem;
+        text-align: center;
+    }
+
+        .cart-header h2 {
+            margin: 0;
+            font-weight: 700;
+        }
+
+    .cart-table {
+        background: white;
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    }
+
+    .cart-item {
+        padding: 1.5rem;
+        border-bottom: 1px solid #f3f4f6;
+        transition: all 0.3s ease;
+    }
+
+        .cart-item:hover {
+            background: #f9fafb;
+            transform: translateX(5px);
+        }
+
+        .cart-item:last-child {
+            border-bottom: none;
+        }
+
+    .product-img {
+        width: 80px;
+        height: 80px;
+        object-fit: cover;
+        border-radius: 10px;
+        box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+    }
+
+    .product-name {
+        font-weight: 600;
+        color: #1f2937;
+        margin-bottom: 0.5rem;
+    }
+
+    .product-price {
+        color: #6366f1;
+        font-weight: 700;
+        font-size: 1.2rem;
+    }
+
+    .quantity-input {
+        width: 80px;
+        border: 2px solid #e5e7eb;
+        border-radius: 8px;
+        padding: 0.5rem;
+        text-align: center;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+        .quantity-input:focus {
+            border-color: #6366f1;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+
+    .btn-remove {
+        background: linear-gradient(135deg, #ef4444, #dc2626);
+        color: white;
+        border: none;
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+        font-weight: 600;
+    }
+
+        .btn-remove:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(239, 68, 68, 0.4);
+            color: white;
+        }
+
+    .summary-card {
+        background: white;
+        border-radius: 15px;
+        padding: 2rem;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        position: sticky;
+        top: 100px;
+    }
+
+    .summary-title {
+        font-size: 1.3rem;
+        font-weight: 700;
+        color: #1f2937;
+        margin-bottom: 1.5rem;
+        padding-bottom: 1rem;
+        border-bottom: 2px solid #f3f4f6;
+    }
+
+    .summary-row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 1rem;
+        color: #6b7280;
+    }
+
+    .summary-total {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 1.5rem;
+        padding-top: 1.5rem;
+        border-top: 2px solid #f3f4f6;
+        font-size: 1.3rem;
+        font-weight: 700;
+    }
+
+        .summary-total .amount {
+            color: #6366f1;
+        }
+
+    .campaign-alert {
+        background: linear-gradient(135deg, #10b981, #059669);
+        color: white;
+        padding: 1rem;
+        border-radius: 10px;
+        margin-bottom: 1rem;
+        animation: pulse-glow 2s infinite;
+    }
+
+    @@keyframes pulse-glow {
+        0%, 100%
+
+    {
+        box-shadow: 0 0 20px rgba(16, 185, 129, 0.5);
+    }
+
+    50% {
+        box-shadow: 0 0 30px rgba(16, 185, 129, 0.8);
+    }
+
+    }
+
+    .info-alert {
+        background: linear-gradient(135deg, #3b82f6, #2563eb);
+        color: white;
+        padding: 1rem;
+        border-radius: 10px;
+        margin-bottom: 1rem;
+    }
+
+    .btn-checkout {
+        background: linear-gradient(135deg, #10b981, #059669);
+        color: white;
+        border: none;
+        padding: 1rem;
+        border-radius: 10px;
+        font-weight: 700;
+        font-size: 1.1rem;
+        width: 100%;
+        transition: all 0.3s ease;
+        box-shadow: 0 5px 20px rgba(16, 185, 129, 0.3);
+    }
+
+        .btn-checkout:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(16, 185, 129, 0.5);
+            color: white;
+        }
+
+    .btn-clear {
+        background: linear-gradient(135deg, #f59e0b, #d97706);
+        color: white;
+        border: none;
+        padding: 0.8rem;
+        border-radius: 10px;
+        font-weight: 600;
+        width: 100%;
+        margin-top: 1rem;
+        transition: all 0.3s ease;
+    }
+
+        .btn-clear:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(245, 158, 11, 0.4);
+            color: white;
+        }
+
+    .empty-cart {
+        text-align: center;
+        padding: 4rem 2rem;
+    }
+
+    .empty-icon {
+        font-size: 6rem;
+        color: #d1d5db;
+        margin-bottom: 1.5rem;
+        animation: float 3s ease-in-out infinite;
+    }
+
+    @@keyframes float {
+        0%, 100%
+
+    {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-20px);
+    }
+
+    }
+
+    .empty-title {
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: #1f2937;
+        margin-bottom: 1rem;
+    }
+
+    .empty-text {
+        color: #6b7280;
+        margin-bottom: 2rem;
+    }
+</style>
+
+@if (TempData["Basarili"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="fas fa-check-circle"></i> @TempData["Basarili"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+<div class="cart-header">
+    <h2><i class="fas fa-shopping-cart"></i> Alışveriş Sepetim</h2>
+</div>
+
+@if (Model != null && Model.Count > 0)
+{
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="cart-table">
+                @foreach (var item in Model)
+                {
+                    <div class="cart-item">
+                        <div class="row align-items-center">
+                            <div class="col-md-2">
+                                @if (!string.IsNullOrEmpty(item.ResimYolu))
+                                {
+                                    <img src="@item.ResimYolu" alt="@item.UrunAdi" class="product-img">
+                                }
+                                else
+                                {
+                                    <div class="product-img bg-light d-flex align-items-center justify-content-center">
+                                        <i class="fas fa-image text-muted"></i>
+                                    </div>
+                                }
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="product-name">@item.UrunAdi</div>
+                                <div class="text-muted small">Birim Fiyat: @item.Fiyat.ToString("C2")</div>
+                            </div>
+
+                            <div class="col-md-2">
+                                <input type="number" value="@item.Adet" min="1" class="quantity-input form-control"
+                                       onchange="window.location.href='/Sepet/AdetGuncelle?id=@item.UrunID&adet=' + this.value">
+                            </div>
+
+                            <div class="col-md-2">
+                                <div class="product-price">@item.ToplamFiyat.ToString("C2")</div>
+                            </div>
+
+                            <div class="col-md-2 text-end">
+                                <a href="/Sepet/Cikar?id=@item.UrunID" class="btn btn-remove btn-sm">
+                                    <i class="fas fa-trash"></i> Çıkar
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                }
+
+                <div class="p-3 text-end">
+                    <a href="/Sepet/Temizle" class="btn btn-clear" onclick="return confirm('Sepeti temizlemek istediğinize emin misiniz?')">
+                        <i class="fas fa-trash-alt"></i> Sepeti Temizle
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="summary-card">
+                <h5 class="summary-title">
+                    <i class="fas fa-receipt"></i> Sipariş Özeti
+                </h5>
+
+                <div class="summary-row">
+                    <span>Ürün Toplamı:</span>
+                    <strong>@ViewBag.ToplamTutar.ToString("C2")</strong>
+                </div>
+
+                @if (ViewBag.KampanyaIndirim > 0)
+                {
+                    <div class="campaign-alert">
+                        <div class="d-flex align-items-center mb-2">
+                            <i class="fas fa-gift fa-2x me-2"></i>
+                            <div>
+                                <strong>@ViewBag.KampanyaAdi</strong><br>
+                                <small>%@ViewBag.KampanyaOran indirim uygulandı!</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="summary-row text-success">
+                        <span>Kampanya İndirimi:</span>
+                        <strong>-@ViewBag.KampanyaIndirim.ToString("C2")</strong>
+                    </div>
+                }
+                else if (ViewBag.ToplamTutar < 250 && ViewBag.ToplamTutar > 0)
+                {
+                    <div class="info-alert">
+                        <i class="fas fa-info-circle"></i> 250 TL ve üzeri alışverişlerde kampanya indirimi kazanın!<br>
+                        <strong>Kalan: @((250 - ViewBag.ToplamTutar).ToString("C2"))</strong>
+                    </div>
+                }
+
+                <div class="summary-total">
+                    <span>Toplam:</span>
+                    <span class="amount">@ViewBag.GenelToplam.ToString("C2")</span>
+                </div>
+
+                @if (Context.Session.GetString("KullaniciEmail") != null)
+                {
+                    <a href="/Siparis/Onayla" class="btn btn-checkout mt-3">
+                        <i class="fas fa-check-circle"></i> Siparişi Tamamla
+                    </a>
+                }
+                else
+                {
+                    <a href="/Account/Login" class="btn btn-checkout mt-3">
+                        <i class="fas fa-sign-in-alt"></i> Giriş Yapın
+                    </a>
+                }
+
+                <a href="/" class="btn btn-outline-secondary w-100 mt-2">
+                    <i class="fas fa-arrow-left"></i> Alışverişe Devam
+                </a>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <div class="cart-table">
+        <div class="empty-cart">
+            <div class="empty-icon">
+                <i class="fas fa-shopping-cart"></i>
+            </div>
+            <h3 class="empty-title">Sepetiniz Boş</h3>
+            <p class="empty-text">Alışverişe başlamak için ürünlere göz atın!</p>
+            <a href="/" class="btn btn-gradient btn-lg">
+                <i class="fas fa-shopping-bag"></i> Alışverişe Başla
+            </a>
+        </div>
+    </div>
+}

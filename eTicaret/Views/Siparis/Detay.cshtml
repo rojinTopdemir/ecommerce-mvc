@@ -1,0 +1,66 @@
+﻿@using eTicaret.Models
+@model Siparis
+@{
+    ViewData["Title"] = "Sipariş Detayı";
+}
+
+<div class="container mt-4">
+    <div class="alert alert-success text-center">
+        <h3>🎉 Siparişiniz Başarıyla Oluşturuldu!</h3>
+        <p>Sipariş No: <strong>#@Model.SiparisID</strong></p>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5>📋 Sipariş Bilgileri</h5>
+                </div>
+                <div class="card-body">
+                    <p><strong>Sipariş No:</strong> #@Model.SiparisID</p>
+                    <p><strong>Tarih:</strong> @Model.SiparisTarihi.ToString("dd.MM.yyyy HH:mm")</p>
+                    <p><strong>Durum:</strong> <span class="badge bg-warning">@Model.Durum</span></p>
+                    <p><strong>Toplam Tutar:</strong> <span class="text-primary">@Model.ToplamTutar.ToString("C2")</span></p>
+                    <p><strong>Teslimat Adresi:</strong><br>@Model.TeslimatAdresi</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5>📦 Sipariş İçeriği</h5>
+                </div>
+                <div class="card-body">
+                    <table class="table table-sm">
+                        <thead>
+                            <tr>
+                                <th>Ürün</th>
+                                <th>Adet</th>
+                                <th>Fiyat</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model.SiparisDetaylari != null)
+                            {
+                                @foreach (var detay in Model.SiparisDetaylari)
+                                {
+                                    <tr>
+                                        <td>@detay.Urun?.UrunAdi</td>
+                                        <td>@detay.Adet</td>
+                                        <td>@((detay.BirimFiyat * detay.Adet).ToString("C2"))</td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="text-center mt-4">
+        <a href="/Siparis/Siparislerim" class="btn btn-primary">📋 Tüm Siparişlerim</a>
+        <a href="/" class="btn btn-secondary">🏠 Ana Sayfaya Dön</a>
+    </div>
+</div>

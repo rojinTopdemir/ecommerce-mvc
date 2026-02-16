@@ -1,0 +1,54 @@
+﻿@using eTicaret.Models
+@model Kampanya
+@{
+    ViewData["Title"] = "Yeni Kampanya Ekle";
+}
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow">
+                <div class="card-body">
+                    <h2 class="text-center mb-4">🎁 Yeni Kampanya Ekle</h2>
+
+                    @if (ViewBag.Hata != null)
+                    {
+                        <div class="alert alert-danger">@ViewBag.Hata</div>
+                    }
+
+                    <form method="post" action="/Kampanya/Ekle">
+                        <div class="mb-3">
+                            <label class="form-label">Kampanya Adı *</label>
+                            <input type="text" class="form-control" name="KampanyaAdi" required placeholder="Örn: Yaz İndirimi" />
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">İndirim Oranı (%) *</label>
+                            <input type="number" step="0.01" class="form-control" name="IndirimOrani" required placeholder="Örn: 30" />
+                            <small class="text-muted">250 TL üzeri alışverişlerde geçerli olacak</small>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Başlangıç Tarihi *</label>
+                            <input type="date" class="form-control" name="BaslangicTarihi" required />
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Bitiş Tarihi *</label>
+                            <input type="date" class="form-control" name="BitisTarihi" required />
+                        </div>
+
+                        <div class="mb-3 form-check">
+                            <input type="checkbox" class="form-check-input" name="Aktif" value="true" checked />
+                            <label class="form-check-label">Kampanya aktif olsun</label>
+                        </div>
+
+                        <button type="submit" class="btn btn-success w-100">💾 Kampanya Ekle</button>
+                    </form>
+
+                    <a href="/Kampanya/Index" class="btn btn-secondary w-100 mt-2">⬅️ İptal</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

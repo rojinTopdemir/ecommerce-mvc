@@ -1,0 +1,9 @@
+﻿## Visual Studio temporary files
+.vs/
+bin/
+obj/
+*.user
+*.suo
+
+## appsettings (şifre gizleme)
+appsettings.Development.json

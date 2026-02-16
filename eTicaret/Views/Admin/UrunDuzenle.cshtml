@@ -1,0 +1,76 @@
+﻿@using eTicaret.Models
+@model Urun
+@{
+    ViewData["Title"] = "Ürün Düzenle";
+}
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-body">
+                    <h2 class="text-center mb-4">✏️ Ürün Düzenle</h2>
+
+                    @if (ViewBag.Hata != null)
+                    {
+                        <div class="alert alert-danger">@ViewBag.Hata</div>
+                    }
+
+                    <form method="post" asp-action="UrunDuzenle">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="UrunID" value="@Model.UrunID" />
+                        <input type="hidden" name="EklenmeTarihi" value="@Model.EklenmeTarihi" />
+
+                        @if (ViewBag.Hata != null)
+                        {
+                            <div class="alert alert-danger">@ViewBag.Hata</div>
+                        }
+                        <div class="mb-3">
+                            <label class="form-label">Ürün Adı *</label>
+                            <input type="text" class="form-control" name="UrunAdi" value="@Model.UrunAdi" required />
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Açıklama</label>
+                            <textarea class="form-control" name="Aciklama" rows="3">@Model.Aciklama</textarea>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Fiyat *</label>
+                            <input type="number" step="0.01" min="0.01" max="999999" class="form-control" name="Fiyat" value="@Model.Fiyat" required />
+                            <small class="text-muted">Minimum: 0.01 TL, Maksimum: 999,999 TL</small>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Stok Miktarı *</label>
+                            <input type="number" min="0" max="999999" class="form-control" name="StokMiktari" value="@Model.StokMiktari" required />
+                            <small class="text-muted">Minimum: 0, Maksimum: 999,999</small>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Kategori</label>
+                            <select class="form-select" name="KategoriID">
+                                <option value="">Kategori Seçin</option>
+                                @foreach (var kategori in ViewBag.Kategoriler)
+                                {
+                                    <option value="@kategori.KategoriID" @(kategori.KategoriID == Model.KategoriID ? "selected" : "")>
+                                        @kategori.KategoriAdi
+                                    </option>
+                                }
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Resim Yolu (URL)</label>
+                            <input type="text" class="form-control" name="ResimYolu" value="@Model.ResimYolu" />
+                        </div>
+
+                        <button type="submit" class="btn btn-warning w-100">💾 Güncelle</button>
+                    </form>
+
+                    <a asp-action="Urunler" class="btn btn-secondary w-100 mt-2">⬅️ İptal</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

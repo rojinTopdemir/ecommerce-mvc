@@ -1,0 +1,60 @@
+﻿@using eTicaret.Models
+@model List<Urun>
+@{
+    ViewData["Title"] = "Ürün Yönetimi";
+}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>📦 Ürün Yönetimi</h2>
+        <a href="/Admin/UrunEkle" class="btn btn-success">➕ Yeni Ürün Ekle</a>
+    </div>
+
+    @if (TempData["Basarili"] != null)
+    {
+        <div class="alert alert-success">@TempData["Basarili"]</div>
+    }
+
+    <div class="table-responsive">
+        <table class="table table-striped table-hover">
+            <thead class="table-dark">
+                <tr>
+                    <th>ID</th>
+                    <th>Ürün Adı</th>
+                    <th>Kategori</th>
+                    <th>Fiyat</th>
+                    <th>Stok</th>
+                    <th>İşlemler</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null && Model.Count > 0)
+                {
+                    @foreach (var urun in Model)
+                    {
+                        <tr>
+                            <td>@urun.UrunID</td>
+                            <td>@urun.UrunAdi</td>
+                            <td>@urun.Kategori?.KategoriAdi</td>
+                            <td>@urun.Fiyat.ToString("C2")</td>
+                            <td>@urun.StokMiktari</td>
+                            <td>
+                                <a href="/Admin/Varyantlar/@urun.UrunID" class="btn btn-sm btn-info">🎨 Varyantlar</a>
+                                <a href="/Admin/UrunDuzenle/@urun.UrunID" class="btn btn-sm btn-warning">✏️ Düzenle</a>
+                                <a href="/Admin/UrunSil/@urun.UrunID" class="btn btn-sm btn-danger" onclick="return confirm('Silmek istediğinize emin misiniz?')">🗑️ Sil</a>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="6" class="text-center">Henüz ürün eklenmemiş.</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <a href="/Admin/Index" class="btn btn-secondary mt-3">⬅️ Geri Dön</a>
+</div>

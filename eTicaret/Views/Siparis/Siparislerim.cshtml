@@ -1,0 +1,72 @@
+﻿@using eTicaret.Models
+@model List<Siparis>
+@{
+    ViewData["Title"] = "Siparişlerim";
+}
+
+<div class="container mt-4">
+    <h2>📋 Siparişlerim</h2>
+
+    @if (Model != null && Model.Count > 0)
+    {
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Sipariş No</th>
+                        <th>Tarih</th>
+                        <th>Toplam Tutar</th>
+                        <th>Durum</th>
+                        <th>İşlemler</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var siparis in Model)
+                    {
+                        <tr>
+                            <td><strong>#@siparis.SiparisID</strong></td>
+                            <td>@siparis.SiparisTarihi.ToString("dd.MM.yyyy HH:mm")</td>
+                            <td>@siparis.ToplamTutar.ToString("C2")</td>
+                            <td>
+                                @if (siparis.Durum == "Beklemede")
+                                {
+                                    <span class="badge bg-warning">⏳ Beklemede</span>
+                                }
+                                else if (siparis.Durum == "Onaylandı")
+                                {
+                                    <span class="badge bg-info">✅ Onaylandı</span>
+                                }
+                                else if (siparis.Durum == "Kargoda")
+                                {
+                                    <span class="badge bg-primary">🚚 Kargoda</span>
+                                }
+                                else if (siparis.Durum == "Teslim Edildi")
+                                {
+                                    <span class="badge bg-success">📦 Teslim Edildi</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-secondary">@siparis.Durum</span>
+                                }
+                            </td>
+                            <td>
+                                <a href="/Siparis/Detay/@siparis.SiparisID" class="btn btn-sm btn-info">👁️ Detay</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-info text-center">
+            <h4>📭 Henüz siparişiniz yok</h4>
+            <p>Alışverişe başlamak için ürünlere göz atın!</p>
+            <a href="/" class="btn btn-primary">🛍️ Alışverişe Başla</a>
+        </div>
+    }
+
+    <a href="/" class="btn btn-secondary mt-3">⬅️ Ana Sayfaya Dön</a>
+</div>
+```

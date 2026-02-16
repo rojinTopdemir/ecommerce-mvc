@@ -1,0 +1,95 @@
+﻿@using eTicaret.Models
+@model Urun
+@{
+    ViewData["Title"] = "Varyant Yönetimi";
+}
+
+<div class="container mt-4">
+    <h2>🎨 @Model.UrunAdi - Varyant Yönetimi</h2>
+
+    @if (TempData["Basarili"] != null)
+    {
+        <div class="alert alert-success">@TempData["Basarili"]</div>
+    }
+
+    @if (TempData["Hata"] != null)
+    {
+        <div class="alert alert-danger">@TempData["Hata"]</div>
+    }
+
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Mevcut Varyantlar</h5>
+                </div>
+                <div class="card-body">
+                    @if (Model.Varyantlar != null && Model.Varyantlar.Count > 0)
+                    {
+                        <table class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th>Renk</th>
+                                    <th>Beden</th>
+                                    <th>Stok</th>
+                                    <th>İşlem</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var varyant in Model.Varyantlar)
+                                {
+                                    <tr>
+                                        <td>@varyant.Renk</td>
+                                        <td>@varyant.Beden</td>
+                                        <td>@varyant.StokMiktari</td>
+                                        <td>
+                                            <a href="/Admin/VaryantSil?id=@varyant.VaryantID&urunId=@Model.UrunID"
+                                               class="btn btn-sm btn-danger"
+                                               onclick="return confirm('Silmek istediğinize emin misiniz?')">🗑️</a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    }
+                    else
+                    {
+                        <p class="text-muted">Henüz varyant eklenmemiş.</p>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Yeni Varyant Ekle</h5>
+                </div>
+                <div class="card-body">
+                    <form method="post" action="/Admin/VaryantEkle">
+                        <input type="hidden" name="urunId" value="@Model.UrunID" />
+
+                        <div class="mb-3">
+                            <label class="form-label">Renk</label>
+                            <input type="text" class="form-control" name="renk" placeholder="Örn: Siyah" />
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Beden</label>
+                            <input type="text" class="form-control" name="beden" placeholder="Örn: M, L, XL" />
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Stok Miktarı *</label>
+                            <input type="number" class="form-control" name="stok" required value="0" />
+                        </div>
+
+                        <button type="submit" class="btn btn-success w-100">➕ Varyant Ekle</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <a href="/Admin/Urunler" class="btn btn-secondary mt-3">⬅️ Ürün Listesine Dön</a>
+</div>

@@ -1,0 +1,37 @@
+﻿@{
+    ViewData["Title"] = "Giriş Yap";
+}
+
+<div class="row justify-content-center mt-5">
+    <div class="col-md-5">
+        <div class="card shadow">
+            <div class="card-body">
+                <h2 class="text-center mb-4">Giriş Yap</h2>
+
+                @if (ViewBag.Hata != null)
+                {
+                    <div class="alert alert-danger">@ViewBag.Hata</div>
+                }
+
+                <form method="post" asp-action="Login">
+                    @Html.AntiForgeryToken()
+                    <div class="mb-3">
+                        <label class="form-label">Email</label>
+                        <input type="email" class="form-control" name="email" required />
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Şifre</label>
+                        <input type="password" class="form-control" name="sifre" required />
+                    </div>
+
+                    <button type="submit" class="btn btn-success w-100">Giriş Yap</button>
+                </form>
+
+                <div class="text-center mt-3">
+                    <p>Hesabınız yok mu? <a asp-action="Register">Kayıt Ol</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

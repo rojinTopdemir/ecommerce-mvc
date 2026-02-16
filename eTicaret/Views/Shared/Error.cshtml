@@ -1,0 +1,108 @@
+﻿@{
+    ViewData["Title"] = "Hata";
+    Layout = "_Layout";
+}
+
+<style>
+    .error-container {
+        text-align: center;
+        padding: 4rem 2rem;
+    }
+
+    .error-icon {
+        font-size: 8rem;
+        background: linear-gradient(135deg, #ef4444, #dc2626);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        margin-bottom: 2rem;
+        animation: shake 0.5s ease-in-out;
+    }
+
+    @@keyframes shake {
+        0%, 100%
+
+    {
+        transform: translateX(0);
+    }
+
+    25% {
+        transform: translateX(-10px);
+    }
+
+    75% {
+        transform: translateX(10px);
+    }
+
+    }
+
+    .error-code {
+        font-size: 6rem;
+        font-weight: 700;
+        background: linear-gradient(135deg, #6366f1, #8b5cf6);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        margin-bottom: 1rem;
+    }
+
+    .error-message {
+        font-size: 1.5rem;
+        color: #1f2937;
+        margin-bottom: 1rem;
+    }
+
+    .error-description {
+        color: #6b7280;
+        margin-bottom: 3rem;
+        max-width: 600px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .error-actions {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+</style>
+
+<div class="error-container">
+    <div class="error-icon">
+        <i class="fas @ViewBag.ErrorIcon"></i>
+    </div>
+
+    @if (ViewBag.StatusCode != null)
+    {
+        <div class="error-code">@ViewBag.StatusCode</div>
+    }
+
+    <h2 class="error-message">@ViewBag.ErrorMessage</h2>
+
+    <p class="error-description">
+        @if (ViewBag.StatusCode == 404)
+        {
+            <text>Üzgünüz, aradığınız sayfa mevcut değil veya taşınmış olabilir.</text>
+        }
+        else if (ViewBag.StatusCode == 500)
+        {
+            <text>Bir şeyler ters gitti. Teknik ekibimiz bu sorunu çözmeye çalışıyor.</text>
+        }
+        else if (ViewBag.StatusCode == 403)
+        {
+            <text>Bu içeriği görüntülemek için gerekli izne sahip değilsiniz.</text>
+        }
+        else
+        {
+            <text>Beklenmeyen bir hata oluştu. Lütfen daha sonra tekrar deneyin.</text>
+        }
+    </p>
+
+    <div class="error-actions">
+        <a href="/" class="btn btn-gradient btn-lg">
+            <i class="fas fa-home"></i> Ana Sayfaya Dön
+        </a>
+        <button onclick="history.back()" class="btn btn-outline-gradient btn-lg">
+            <i class="fas fa-arrow-left"></i> Geri Git
+        </button>
+    </div>
+</div>

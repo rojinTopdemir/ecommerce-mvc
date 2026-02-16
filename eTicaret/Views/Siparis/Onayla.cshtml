@@ -1,0 +1,73 @@
+﻿@using eTicaret.Models
+@model List<SepetItem>
+@{
+    ViewData["Title"] = "Sipariş Onay";
+}
+
+<div class="container mt-4">
+    <h2>✅ Sipariş Onayı</h2>
+
+    @if (TempData["Hata"] != null)
+    {
+        <div class="alert alert-danger">@TempData["Hata"]</div>
+    }
+
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card mb-3">
+                <div class="card-header">
+                    <h5>📦 Sipariş Özeti</h5>
+                </div>
+                <div class="card-body">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Ürün</th>
+                                <th>Fiyat</th>
+                                <th>Adet</th>
+                                <th>Toplam</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>@item.UrunAdi</td>
+                                    <td>@item.Fiyat.ToString("C2")</td>
+                                    <td>@item.Adet</td>
+                                    <td><strong>@item.ToplamFiyat.ToString("C2")</strong></td>
+                                </tr>
+                            }
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="3" class="text-end"><strong>Genel Toplam:</strong></td>
+                                <td><strong class="text-primary">@Model.Sum(s => s.ToplamFiyat).ToString("C2")</strong></td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5>🚚 Teslimat Bilgileri</h5>
+                </div>
+                <div class="card-body">
+                    <form method="post" action="/Siparis/Olustur">
+                        <div class="mb-3">
+                            <label class="form-label">Teslimat Adresi *</label>
+                            <textarea name="teslimatAdresi" class="form-control" rows="4" required placeholder="Adresinizi giriniz..."></textarea>
+                        </div>
+
+                        <button type="submit" class="btn btn-success w-100">✅ Siparişi Onayla</button>
+                    </form>
+
+                    <a href="/Sepet/Index" class="btn btn-outline-secondary w-100 mt-2">⬅️ Sepete Dön</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

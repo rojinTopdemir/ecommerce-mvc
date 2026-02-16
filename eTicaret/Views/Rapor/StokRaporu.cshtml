@@ -1,0 +1,95 @@
+﻿@using eTicaret.Models
+@model List<Urun>
+@{
+    ViewData["Title"] = "Stok Raporu";
+}
+
+<h2><i class="fas fa-boxes"></i> Stok Raporu</h2>
+
+<!-- ÖZET KARTLAR -->
+<div class="row g-3 mb-4">
+    <div class="col-md-4">
+        <div class="card text-white bg-warning">
+            <div class="card-body text-center">
+                <h3>@ViewBag.DusukStok</h3>
+                <p class="mb-0">Düşük Stoklu Ürün</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-white bg-danger">
+            <div class="card-body text-center">
+                <h3>@ViewBag.TukenenStok</h3>
+                <p class="mb-0">Tükenen Ürün</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-white bg-success">
+            <div class="card-body text-center">
+                <h3>@ViewBag.ToplamStokDegeri.ToString("C2")</h3>
+                <p class="mb-0">Toplam Stok Değeri</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="mb-3">
+    <a href="/Rapor/StokRaporuExcel" class="btn btn-success">
+        <i class="fas fa-file-excel"></i> Excel'e Aktar
+    </a>
+</div>
+
+<!-- TABLO -->
+<div class="card">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead class="table-dark">
+                    <tr>
+                        <th>ID</th>
+                        <th>Ürün Adı</th>
+                        <th>Kategori</th>
+                        <th>Stok</th>
+                        <th>Birim Fiyat</th>
+                        <th>Stok Değeri</th>
+                        <th>Durum</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var urun in Model)
+                    {
+                        <tr class="@(urun.StokMiktari == 0 ? "table-danger" : urun.StokMiktari < 10 ? "table-warning" : "")">
+                            <td>@urun.UrunID</td>
+                            <td>@urun.UrunAdi</td>
+                            <td>@urun.Kategori?.KategoriAdi</td>
+                            <td><strong>@urun.StokMiktari</strong></td>
+                            <td>@urun.Fiyat.ToString("C2")</td>
+                            <td><strong>@((urun.StokMiktari * urun.Fiyat).ToString("C2"))</strong></td>
+                            <td>
+                                @if (urun.StokMiktari == 0)
+                                {
+                                    <span class="badge bg-danger">Tükendi</span>
+                                }
+                                else if (urun.StokMiktari < 10)
+                                {
+                                    <span class="badge bg-warning">Düşük</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-success">Normal</span>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="mt-3">
+    <a href="/Rapor/Index" class="btn btn-secondary">
+        <i class="fas fa-arrow-left"></i> Raporlara Dön
+    </a>
+</div>
