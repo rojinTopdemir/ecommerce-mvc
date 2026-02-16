@@ -5,5 +5,4 @@
     plan: free
     region: frankfurt
     branch: main
-    rootDir: eTicaret
-    dockerfilePath: ./Dockerfile
+    dockerfilePath: ./eTicaret/Dockerfile
