@@ -1,0 +1,108 @@
+# Render Deployment Rehberi - ecommerce-mvc
+
+## 📋 Hazırlık
+
+Bu dosyalar GitHub repository'nize eklenmiştir:
+- ✅ Dockerfile
+- ✅ .dockerignore
+- ✅ render.yaml
+
+## 🚀 Deployment Adımları
+
+### 1. Render Hesabı Oluşturun
+1. https://render.com adresine gidin
+2. "Get Started for Free" butonuna tıklayın
+3. GitHub hesabınızla giriş yapın
+4. Render'a GitHub repository'lerinize erişim izni verin
+
+### 2. MySQL Database Oluşturun (Ücretsiz Alternatif)
+Render ücretsiz MySQL sunmadığı için şu seçenekler var:
+
+**Seçenek A: PlanetScale (Önerilen)**
+1. https://planetscale.com adresine gidin
+2. Ücretsiz hesap oluşturun
+3. Yeni database oluşturun
+4. Connection string'i kopyalayın
+
+**Seçenek B: FreeSQLDatabase.com**
+1. https://www.freesqldatabase.com adresine gidin
+2. Ücretsiz MySQL database oluşturun
+3. Bağlantı bilgilerini kaydedin
+
+**Seçenek C: Render PostgreSQL (Ücretsiz)**
+1. Render Dashboard'da "New +" → "PostgreSQL"
+2. Free plan seçin
+3. Database oluşturun
+4. Connection string otomatik gelir
+
+### 3. Web Service Oluşturun
+1. Render Dashboard'da "New +" butonuna tıklayın
+2. "Web Service" seçin
+3. GitHub repository'nizi seçin: `rojinTopdemir/ecommerce-mvc`
+4. Şu ayarları yapın:
+   - **Name:** ecommerce-mvc
+   - **Region:** Frankfurt (size en yakın)
+   - **Branch:** main
+   - **Runtime:** Docker
+   - **Plan:** Free
+
+### 4. Environment Variables Ekleyin
+"Environment" sekmesinde şu değişkenleri ekleyin:
+
+```
+ASPNETCORE_ENVIRONMENT=Production
+ASPNETCORE_URLS=http://+:8080
+ConnectionStrings__DefaultConnection=Server=YOUR_HOST;Database=YOUR_DB;User=YOUR_USER;Password=YOUR_PASSWORD;
+```
+
+**Not:** MySQL connection string formatı:
+```
+Server=YOUR_HOST;Port=3306;Database=YOUR_DB;Uid=YOUR_USER;Pwd=YOUR_PASSWORD;SslMode=Required;
+```
+
+### 5. Deploy Edin
+1. "Create Web Service" butonuna tıklayın
+2. Render otomatik olarak projenizi build edip deploy edecek
+3. 5-10 dakika bekleyin
+4. Deploy tamamlandığında size bir URL verilecek (örn: https://ecommerce-mvc.onrender.com)
+
+## ⚠️ Önemli Notlar
+
+### Ücretsiz Plan Limitleri:
+- ✅ 750 saat/ay çalışma süresi
+- ✅ Otomatik SSL sertifikası
+- ⚠️ 15 dakika kullanılmazsa uyku moduna geçer
+- ⚠️ İlk istekte 30-60 saniye gecikme olabilir
+
+### Database Seçenekleri:
+- **PostgreSQL** → Render'da ücretsiz (750 MB)
+- **MySQL** → PlanetScale ücretsiz (5 GB)
+- **MySQL** → FreeSQLDatabase.com ücretsiz (5 MB)
+
+## 🔧 Sorun Giderme
+
+### Build Hatası Alırsanız:
+1. Logs sekmesini kontrol edin
+2. Dockerfile'daki proje adının doğru olduğundan emin olun
+3. .csproj dosyasının repository'de olduğunu kontrol edin
+
+### Connection String Hatası:
+1. Environment variables'ı kontrol edin
+2. MySQL server'ın dışarıdan erişime açık olduğundan emin olun
+3. Connection string formatını kontrol edin
+
+### Site Yavaş Açılıyor:
+- Bu normaldir (ücretsiz plan)
+- 15 dakika sonra uyur, ilk istekte uyanır
+- Render Cron Job ile her 14 dakikada bir ping atabilirsiniz
+
+## 📞 Yardım
+Herhangi bir sorun yaşarsanız:
+- Render Docs: https://render.com/docs
+- Render Discord: https://discord.gg/render
+
+## ✅ Deployment Başarılı Olduktan Sonra
+Siteniz şu adreste yayında olacak:
+`https://ecommerce-mvc.onrender.com`
+
+Başarılar! 🎉
