@@ -1,0 +1,9 @@
+﻿services:
+  - type: web
+    name: ecommerce-mvc
+    runtime: docker
+    plan: free
+    region: frankfurt
+    branch: main
+    rootDir: eTicaret
+    dockerfilePath: ./Dockerfile
